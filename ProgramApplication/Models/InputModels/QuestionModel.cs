@@ -2,6 +2,7 @@
 
 public class QuestionsModel
 {
+    public Guid Id { get; set; }
     public Guid QuestionTypeId { get; set; }
     public string Question { get; set; }
     public bool IsRequired { get; set; }

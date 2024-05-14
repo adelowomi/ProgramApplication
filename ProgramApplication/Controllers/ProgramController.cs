@@ -23,14 +23,15 @@ public class ProgramController : StandardControllerBase
         return Result(await _programService.CreateProgram(programModel));
     }
 
-    [HttpPut("update", Name = nameof(UpdateProgram))]
+    [HttpPut("update/{programId}", Name = nameof(UpdateProgramQuestion))]
     [ProducesResponseType(typeof(StandardResponse<ProgramView>), 200)]
     [ProducesResponseType(typeof(StandardResponse<ProgramView>), 400)]
     [ProducesResponseType(typeof(StandardResponse<ProgramView>), 500)]
-    public async Task<ActionResult<StandardResponse<ProgramView>>> UpdateProgram([FromBody]ProgramModel programModel)
+    public async Task<ActionResult<StandardResponse<ProgramView>>> UpdateProgramQuestion([FromBody]QuestionsModel model, Guid programId)
     {
-        return Result(await _programService.UpdateProgram(programModel));
+        return Result(await _programService.UpdateProgramQuestion(model, programId));
     }
+
 
     [HttpGet("list", Name = nameof(GetAllPrograms))]
     [ProducesResponseType(typeof(StandardResponse<IEnumerable<ProgramView>>), 200)]

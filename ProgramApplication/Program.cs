@@ -12,6 +12,8 @@ builder.Services.AddAppService(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseExceptionHandlerMiddleware();
+
 // fetch the context and ensure db is created
 using (var scope = app.Services.CreateScope())
 {

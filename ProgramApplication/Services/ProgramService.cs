@@ -83,10 +83,12 @@ public class ProgramService : IProgramService
         return StandardResponse<ProgramView>.Ok(programView);
     }
 
-    public async Task<StandardResponse<ProgramView>> UpdateProgram(ProgramModel programModel)
+    public async Task<StandardResponse<ProgramView>> UpdateProgramQuestion(QuestionsModel model, Guid programId)
     {
-        var program = programModel.Adapt<Programs>();
+        var program = await _programRepository.GetById(programId);
+        var question = program.Questions.FirstOrDefault(q => q.Id == model.Id);
 
+        question = model.Adapt(question);
         program = await _programRepository.Update(program);
         var programView = program.Adapt<ProgramView>();
 
