@@ -12,4 +12,6 @@ public class QuestionView
     public bool IsHidden { get; set; }
     public List<string>? Options { get; set; }
     public bool OtherOptionsAllowed { get; set; }
+    public Guid QuestionTypeId { get; set; }
+    public QuestionTypeView QuestionTypeView { get; set; }
 }

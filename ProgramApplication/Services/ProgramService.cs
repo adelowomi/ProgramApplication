@@ -1,14 +1,17 @@
 ﻿using Mapster;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProgramApplication;
 
 public class ProgramService : IProgramService
 {
     private readonly IBaseRepository<Programs> _programRepository;
+    private readonly IBaseRepository<QuestionType> _questionTypeRepository;
 
-    public ProgramService(IBaseRepository<Programs> programRepository)
+    public ProgramService(IBaseRepository<Programs> programRepository, IBaseRepository<QuestionType> questionTypeRepository)
     {
         _programRepository = programRepository;
+        _questionTypeRepository = questionTypeRepository;
     }
 
 
@@ -24,16 +27,34 @@ public class ProgramService : IProgramService
 
     public async Task<StandardResponse<IEnumerable<ProgramView>>> GetAllPrograms()
     {
-        var programs = await _programRepository.GetAll();
+        var programs =  _programRepository.Query().Include(p => p.Questions).ToList();
         var programViews = programs.Adapt<IEnumerable<ProgramView>>();
+
+        // add question type view to all the questions in the program
+        programViews = programViews.Select(p => 
+        {
+            p.Questions = p.Questions.Select(q => 
+            {
+                q.QuestionTypeView = GetQuestionTypeView(q.QuestionTypeId).Result;
+                return q;
+            }).ToList();
+            return p;
+        }).ToList();
 
         return StandardResponse<IEnumerable<ProgramView>>.Ok(programViews);
     }
 
     public async Task<StandardResponse<ProgramView>> GetProgramById(Guid id)
     {
-        var program = await _programRepository.GetById(id); 
+        var program =  _programRepository.Query().Include(p => p.Questions).FirstOrDefault(x => x.Id == id); 
         var programView = program.Adapt<ProgramView>();
+
+        // add question type view to all the questions in the program
+        programView.Questions = programView.Questions.Select(q => 
+        {
+            q.QuestionTypeView = GetQuestionTypeView(q.QuestionTypeId).Result;
+            return q;
+        }).ToList();
 
         return StandardResponse<ProgramView>.Ok(programView);
     }
@@ -82,5 +103,14 @@ public class ProgramService : IProgramService
         var submissionView = submission.Adapt<SubmissionView>();
 
         return StandardResponse<SubmissionView>.Ok(submissionView);
+    }
+
+
+    private async Task<QuestionTypeView> GetQuestionTypeView(Guid questionTypeId)
+    {
+        var questionType = await _questionTypeRepository.GetById(questionTypeId);
+        var questionTypeView = questionType.Adapt<QuestionTypeView>();
+
+        return questionTypeView;
     }
 }

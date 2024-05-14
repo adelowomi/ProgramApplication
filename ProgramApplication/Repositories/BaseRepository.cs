@@ -100,9 +100,9 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
         /// Get All  Values For Entity as a query
         /// </summary>
         /// <returns></returns>
-        public async Task<IQueryable<T>> Query()
+        public IQueryable<T> Query()
         {
-            return await Task.FromResult(_context.Set<T>().AsQueryable());
+            return _context.Set<T>().AsQueryable();
         }
 
         /// <summary>

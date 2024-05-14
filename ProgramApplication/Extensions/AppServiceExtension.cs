@@ -37,5 +37,6 @@ public static class AppServiceExtension
 
         // configure services
         services.AddTransient<IQuestionTypeService, QuestionTypeService>();
+        services.AddTransient<IProgramService, ProgramService>();
     }
 }

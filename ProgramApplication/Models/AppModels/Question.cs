@@ -15,9 +15,7 @@ public class Question
     public List<string>? Options { get; set; }
     public bool OtherOptionsAllowed { get; set; }
     public Guid ProgramId { get; set; }
-    [ForeignKey(nameof(ProgramId))]
     public Programs Program { get; set; }
     public Guid QuestionTypeId { get; set; }
-    [ForeignKey(nameof(QuestionTypeId))]
     public QuestionType QuestionType { get; set; }
 }

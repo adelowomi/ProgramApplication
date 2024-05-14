@@ -12,6 +12,13 @@ builder.Services.AddAppService(builder.Configuration);
 
 var app = builder.Build();
 
+// fetch the context and ensure db is created
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<Context>();
+    context.Database.EnsureCreated();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

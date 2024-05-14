@@ -14,7 +14,7 @@ public interface IBaseRepository<T> where T : class
     /// Get All Entity Type 'T' as query
     /// </summary>
     /// <returns></returns>
-    Task<IQueryable<T>> Query();
+    IQueryable<T> Query();
 
     /// <summary>
     /// Find Method Using Predicate

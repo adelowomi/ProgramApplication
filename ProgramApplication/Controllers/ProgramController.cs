@@ -23,6 +23,15 @@ public class ProgramController : StandardControllerBase
         return Result(await _programService.CreateProgram(programModel));
     }
 
+    [HttpPut("update", Name = nameof(UpdateProgram))]
+    [ProducesResponseType(typeof(StandardResponse<ProgramView>), 200)]
+    [ProducesResponseType(typeof(StandardResponse<ProgramView>), 400)]
+    [ProducesResponseType(typeof(StandardResponse<ProgramView>), 500)]
+    public async Task<ActionResult<StandardResponse<ProgramView>>> UpdateProgram([FromBody]ProgramModel programModel)
+    {
+        return Result(await _programService.UpdateProgram(programModel));
+    }
+
     [HttpGet("list", Name = nameof(GetAllPrograms))]
     [ProducesResponseType(typeof(StandardResponse<IEnumerable<ProgramView>>), 200)]
     [ProducesResponseType(typeof(StandardResponse<IEnumerable<ProgramView>>), 400)]
